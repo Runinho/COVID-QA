@@ -4,7 +4,7 @@ from datetime import date
 import scrapy
 import pandas as pd
 
-class CDCChildrenScrapper(scrapy.Spider):
+class CovidScraper(scrapy.Spider):
   name = "CDC_Children_Scraper"
   start_urls = ["https://www.cdc.gov/coronavirus/2019-ncov/prepare/children-faq.html"]
 
@@ -59,7 +59,7 @@ class CDCChildrenScrapper(scrapy.Spider):
           current_answer += " ".join(answer_part).strip()
           answer_part_html = node.getall()
           current_answer_html += " ".join(answer_part_html).strip()
-      
+
       else:
         columns["question"].append(current_question)
         columns["answer"].append(current_answer)
@@ -78,7 +78,4 @@ class CDCChildrenScrapper(scrapy.Spider):
     columns["lang"] = ["en"] * len(columns["question"])
     columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
-    dataframe = pd.DataFrame(columns)
-
-    dataframe.to_csv("cdc_children.tsv", sep="\t", index=False)
-
+    return columns
